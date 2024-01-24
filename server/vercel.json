@@ -11,7 +11,7 @@
     {
       "src": "/(.*)",
       "dest": "dist/index.js",
-      "methods": ["GET", "POST", "DELETE", "PATCH"],
+      "methods": ["GET", "POST", "DELETE", "PATCH", "OPTIONS"],
       "headers": {
         "Access-Control-Allow-Origin": "*"
       }
