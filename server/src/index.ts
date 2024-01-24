@@ -14,7 +14,7 @@ app.use("/online_planner", routers);
 
 const start = async () => {
   try {
-    await mongoose.connect(process.env.DB_URL);
+    await mongoose.connect('mongodb+srv://olgrachov:VjtIGuwf68FGecIf@cluster0.bkuqaxn.mongodb.net/online_planner?retryWrites=true&w=majority');
     console.log("MONGO_DB - connected");
 
     app.listen(PORT, () => {
