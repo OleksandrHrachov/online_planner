@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import moment, { Moment } from "moment";
 import "./CalendarDay.scss";
 import { useAppSelector, useAppDispatch } from "../../hooks";
-import { openModal } from "../../store/modalSlice";
 import { setSelectedDay } from "../../store/selectedDaySlice";
-import { ITodo, LIST_TODOS_MODAL } from "../../store/types";
+import { ITodo } from "../../store/types";
 
 interface Day {
   day: Moment;
@@ -32,11 +31,9 @@ export default function CalendarDay({ day }: Day) {
   const isCurrentDay = moment().isSame(day, "day");
 
   const handleClickOnDay = () => {
-    dispatch(openModal(LIST_TODOS_MODAL));
     dispatch(
       setSelectedDay({
         selectedDay: dayKey,
-        selectedDayTodos: todosForDayItems || [],
       })
     );
   };

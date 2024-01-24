@@ -48,6 +48,7 @@ export const CreateTodoModal = () => {
 
       if (response) {
         dispatch(addToDo(response));
+
         reset();
         dispatch(closeModal(CREATE_MODAL));
       }

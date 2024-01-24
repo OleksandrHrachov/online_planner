@@ -1,0 +1,50 @@
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  &__left-side {
+    display: flex;
+    align-items: center;
+  }
+
+  &__checkbox {
+    cursor: pointer;
+    margin-right: 6px;
+    height: 20px;
+    width: 20px;
+  }
+
+  &__title--checked {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+
+  &__btn {
+    cursor: pointer;
+    border: 1px solid var(--color-gray-primary);
+    border-radius: 4px;
+    padding: 4px;
+    transition: all 0.5s;
+
+    &-edit {
+      background-color: var(--color-green-06);
+      margin-right: 6px;
+
+      &:hover {
+        
+        background-color: var(--color-green-1);
+      }
+    }
+
+    &-delete {
+      
+      background-color: var(--color-red-06);
+
+      &:hover {
+        background-color: var(--color-red-1);
+      }
+    }
+  }
+}

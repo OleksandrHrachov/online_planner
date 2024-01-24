@@ -5,7 +5,6 @@ import { CalendarHeader } from "./components/CalendarHeader";
 import { CreateTodoModal } from "./components/CreateTodoModal";
 import moment from "moment";
 import { useAppSelector, useAppDispatch } from "./hooks";
-import { ListTodosModal } from "./components/ListTodosModal";
 import { EditTodoModal } from "./components/EditTodoModal";
 import { ApiStorageService } from "./services/ApiStorageService";
 import { initState } from "./store/todoSlice";
@@ -14,6 +13,8 @@ import {
   setCurrentDate as setCurrentDateState,
   setSelectedtDate,
 } from "./store/dateSlice";
+import { TodosList } from "./components/TodosList";
+import { setSelectedDay } from "./store/selectedDaySlice";
 
 function App() {
   const { modal, date } = useAppSelector((state) => state);
@@ -53,6 +54,11 @@ function App() {
 
   useEffect(() => {
     getStorageState();
+    dispatch(
+      setSelectedDay({
+        selectedDay: moment().format("DD-MM-YYYY")
+      })
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -114,14 +120,13 @@ function App() {
           />
         </div>
         <div className="calendar__body-wrapper">
-          <div className="calendar__body-selected-day">TODO List</div>
+          <div className="calendar__body-selected-day"><TodosList/></div>
           <div className="calendar__body-calendar">
             <CalendarBody firstDay={startListDay} lastDay={endListDay} />
           </div>
         </div>
       </div>
       {modal.isCreateModalOpen && <CreateTodoModal />}
-      {modal.isListTodosModalOpen && <ListTodosModal />}
       {modal.isEditTodoModalOpen && <EditTodoModal />}
       {modal.isCalendarModalOpen && <BackgroundOverlay />}
       {isLoading && (
