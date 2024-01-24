@@ -10,7 +10,9 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const router_1 = require("./router");
 const PORT = process.env.PORT || 5000;
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: "http://localhost:5173"
+}));
 app.use(express_1.default.json());
 app.use("/online_planner", router_1.routers);
 const start = async () => {
