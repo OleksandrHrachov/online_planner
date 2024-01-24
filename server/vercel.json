@@ -9,7 +9,7 @@
   ],
   "routes": [
     {
-      "src": "/online_planner/(.*)",
+      "src": "/(.*)",
       "dest": "dist/index.js",
       "methods": ["GET", "POST", "DELETE", "PATCH"],
       "headers": {
