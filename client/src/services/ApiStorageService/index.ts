@@ -55,7 +55,7 @@ export class ApiStorageService {
   static async updateTodo(todo: ITodo): Promise<ITodo> {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}//${todo._id}`,
+        `${import.meta.env.VITE_API_URL}/${todo._id}`,
         {
           method: "PATCH",
           body: JSON.stringify(todo),
