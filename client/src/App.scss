@@ -1,0 +1,43 @@
+.calendar {
+  display: flex;
+  min-height: 100%;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  max-width: 1400px;
+  min-width: 750px;
+  width: 100%;
+  overflow: hidden;
+
+  &__inner {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100%;
+    flex-grow: 1;
+    border-radius: 8px;
+    border: 2px solid var(--color-gray-primary);
+  }
+
+  &__header-wrapper {
+    margin-bottom: 8px;
+  }
+
+  &__body-wrapper {
+    display: flex;
+    gap: 5px;
+  }
+
+  &__body-selected-day {
+    width: 35%;
+    border: 1px solid var(--color-gray-primary);
+    border-radius: 4px;
+    padding: 10px;
+  }
+
+  &__body-calendar {
+    width: 65%;
+  }
+}
