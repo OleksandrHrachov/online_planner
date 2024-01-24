@@ -1,7 +1,5 @@
 ## ONLINE PLANNER
 
-[DEMO LINK](https://oleksandrhrachov.github.io/online_planner/)
-
 ### RUN PROJECT
 - clone project
 - open a terminal
