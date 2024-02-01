@@ -13,7 +13,11 @@ const todoSlice = createSlice({
       state.todos = action.payload;
     },
     addToDo(state, action: PayloadAction<ITodo>) {
-      state.todos.push(action.payload);
+      const hasDuplicate = state.todos.findIndex(todo => todo._id === action.payload._id) !== -1;
+
+      if (!hasDuplicate) {
+        state.todos.push(action.payload);
+      }
     },
     updateToDo(state, action: PayloadAction<ITodo>) {
       const todo = state.todos.find(

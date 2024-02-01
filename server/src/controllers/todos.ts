@@ -1,5 +1,14 @@
-import { TodoModel, deleteTodoById, getAllTodos, getTodoById } from "../db/todo";
+import {
+  TodoModel,
+  deleteTodoById,
+  getAllTodos,
+  getTodoById,
+} from "../db/todo";
 import express from "express";
+import events from "events";
+
+const emmiter = new events.EventEmitter();
+emmiter.setMaxListeners(20);
 
 export const getTodos = async (req: express.Request, res: express.Response) => {
   try {
@@ -32,6 +41,11 @@ export const createTodo = async (
     });
 
     const savedTodo = await newTodo.save();
+
+    emmiter.emit("updateCalendarState", {
+      type: "createTodo",
+      todo: savedTodo,
+    });
 
     return res.status(200).json(savedTodo).end();
   } catch (error) {
@@ -67,6 +81,11 @@ export const updateTodo = async (
 
     const updatedTodo = await todo.save();
 
+    emmiter.emit("updateCalendarState", {
+      type: "updateTodo",
+      todo: updatedTodo,
+    });
+
     return res.status(200).json(updatedTodo).end();
   } catch (error) {
     console.log("todos controller error updateTodo =>", error);
@@ -83,10 +102,31 @@ export const deleteTodo = async (
     const { id } = req.params;
     const deletedTodo = await deleteTodoById(id);
 
+    emmiter.emit("updateCalendarState", {
+      type: "deleteTodo",
+      todo: id,
+    });
+
     return res.status(200).json(id).end();
   } catch (error) {
     console.log("todos controller error deleteTodo =>", error);
 
     return res.sendStatus(500);
+  }
+};
+
+export const autoRefresh = (req: express.Request, res: express.Response) => {
+  try {
+    res.writeHead(200, {
+      "Connection": "keep-alive",
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+    });
+
+    emmiter.on("updateCalendarState", (message) => {
+      res.write(`data: ${JSON.stringify(message)} \n\n`);
+    });
+  } catch (error) {
+    console.log("todos controller error autoRefresh =>", error)
   }
 };

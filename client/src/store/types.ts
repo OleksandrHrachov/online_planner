@@ -1,12 +1,17 @@
 export interface ITodo {
   _id?: string;
   title: string;
-  description: string | '';
+  description: string | "";
   date: string;
-  time: string | '';
-  createdAt: string | '';
-  updatedAt: string | '';
+  time: string | "";
+  createdAt: string | "";
+  updatedAt: string | "";
   checked: boolean;
+}
+
+export interface IRefreshResponse {
+  type: string;
+  todo: ITodo | string;
 }
 
 export interface ITodoState {
