@@ -119,6 +119,7 @@ export const autoRefresh = (req: express.Request, res: express.Response) => {
   try {
     res.writeHead(200, {
       "Connection": "keep-alive",
+      'Content-Encoding': 'none',
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
     });
