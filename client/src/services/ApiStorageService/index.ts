@@ -1,6 +1,7 @@
 import { LOCAL_STORAGE_DATE_KEY } from "../../const";
 import { LocalStorageService } from "./LocalStorageService";
-import { ITodo } from "../../store/types";
+import { IRefreshResponse, ITodo } from "../../store/types";
+import type { AppDispatch } from "../../store";
 
 export class ApiStorageService {
   static async saveTodo(todo: ITodo): Promise<ITodo> {
@@ -121,5 +122,15 @@ export class ApiStorageService {
     } catch (error) {
       throw new Error("some error");
     }
+  }
+
+  static async subscribeRefreshTodoOnServer(callback: (arg: IRefreshResponse, func: AppDispatch) => void, func: AppDispatch) {
+    const eventSource = new EventSource(
+      `${import.meta.env.VITE_API_URL}/connection`
+    );
+    eventSource.onmessage = (event: MessageEvent) => {
+      const data: IRefreshResponse = JSON.parse(event.data);
+      callback(data, func)
+    };
   }
 }

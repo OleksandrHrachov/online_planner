@@ -15,6 +15,7 @@ import {
 } from "./store/dateSlice";
 import { TodosList } from "./components/TodosList";
 import { setSelectedDay } from "./store/selectedDaySlice";
+import { handleRefreshType } from "./services/ApiStorageService/helper";
 
 function App() {
   const { modal, date } = useAppSelector((state) => state);
@@ -53,10 +54,11 @@ function App() {
   };
 
   useEffect(() => {
+    ApiStorageService.subscribeRefreshTodoOnServer(handleRefreshType, dispatch);
     getStorageState();
     dispatch(
       setSelectedDay({
-        selectedDay: moment().format("DD-MM-YYYY")
+        selectedDay: moment().format("DD-MM-YYYY"),
       })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,7 +122,9 @@ function App() {
           />
         </div>
         <div className="calendar__body-wrapper">
-          <div className="calendar__body-selected-day"><TodosList/></div>
+          <div className="calendar__body-selected-day">
+            <TodosList />
+          </div>
           <div className="calendar__body-calendar">
             <CalendarBody firstDay={startListDay} lastDay={endListDay} />
           </div>
