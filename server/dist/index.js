@@ -15,11 +15,13 @@ app.use(express_1.default.json());
 app.use("/online_planner", router_1.routers);
 const start = async () => {
     try {
-        await mongoose_1.default.connect('mongodb+srv://olgrachov:VjtIGuwf68FGecIf@cluster0.bkuqaxn.mongodb.net/online_planner?retryWrites=true&w=majority');
+        await mongoose_1.default.connect("mongodb+srv://olgrachov:VjtIGuwf68FGecIf@cluster0.bkuqaxn.mongodb.net/online_planner?retryWrites=true&w=majority");
         console.log("MONGO_DB - connected");
-        app.listen(PORT, () => {
+        const server = app.listen(PORT, () => {
             console.log(`server listening on http://localhost:${PORT}`);
         });
+        server.keepAliveTimeout = 61 * 1000;
+        server.headersTimeout = 65 * 1000;
     }
     catch (error) {
         console.log("SERVER ERROR =>", error);
