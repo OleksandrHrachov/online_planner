@@ -1,7 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTodo = exports.updateTodo = exports.createTodo = exports.getTodos = void 0;
+exports.autoRefresh = exports.deleteTodo = exports.updateTodo = exports.createTodo = exports.getTodos = void 0;
 const todo_1 = require("../db/todo");
+const events_1 = __importDefault(require("events"));
+const emmiter = new events_1.default.EventEmitter();
+emmiter.setMaxListeners(20);
 const getTodos = async (req, res) => {
     try {
         const todosResult = await (0, todo_1.getAllTodos)();
@@ -26,6 +32,10 @@ const createTodo = async (req, res) => {
             updatedAt,
         });
         const savedTodo = await newTodo.save();
+        emmiter.emit("updateCalendarState", {
+            type: "createTodo",
+            todo: savedTodo,
+        });
         return res.status(200).json(savedTodo).end();
     }
     catch (error) {
@@ -50,6 +60,10 @@ const updateTodo = async (req, res) => {
         todo.title = title;
         todo.updatedAt = updatedAt;
         const updatedTodo = await todo.save();
+        emmiter.emit("updateCalendarState", {
+            type: "updateTodo",
+            todo: updatedTodo,
+        });
         return res.status(200).json(updatedTodo).end();
     }
     catch (error) {
@@ -62,6 +76,10 @@ const deleteTodo = async (req, res) => {
     try {
         const { id } = req.params;
         const deletedTodo = await (0, todo_1.deleteTodoById)(id);
+        emmiter.emit("updateCalendarState", {
+            type: "deleteTodo",
+            todo: id,
+        });
         return res.status(200).json(id).end();
     }
     catch (error) {
@@ -70,4 +88,21 @@ const deleteTodo = async (req, res) => {
     }
 };
 exports.deleteTodo = deleteTodo;
+const autoRefresh = (req, res) => {
+    try {
+        res.writeHead(200, {
+            "Connection": "keep-alive",
+            'Content-Encoding': 'none',
+            "Content-Type": "text/event-stream",
+            "Cache-Control": "no-cache",
+        });
+        emmiter.on("updateCalendarState", (message) => {
+            res.write(`data: ${JSON.stringify(message)} \n\n`);
+        });
+    }
+    catch (error) {
+        console.log("todos controller error autoRefresh =>", error);
+    }
+};
+exports.autoRefresh = autoRefresh;
 //# sourceMappingURL=todos.js.map
